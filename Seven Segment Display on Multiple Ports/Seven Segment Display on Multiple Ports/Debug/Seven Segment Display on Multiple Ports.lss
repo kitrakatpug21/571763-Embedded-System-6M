@@ -1,0 +1,253 @@
+
+Seven Segment Display on Multiple Ports.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000017a  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001ce  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001ce  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000200  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000020  00000000  00000000  0000023c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000083a  00000000  00000000  0000025c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005cf  00000000  00000000  00000a96  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000388  00000000  00000000  00001065  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000024  00000000  00000000  000013f0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000364  00000000  00000000  00001414  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000288  00000000  00000000  00001778  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000010  00000000  00000000  00001a00  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 bb 00 	jmp	0x176	; 0x176 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+#define F_CPU 8000000UL
+#include <util/delay.h>
+
+int main(void)
+{
+	DDRD = 0b01111111; // PD7 as INPUT, PD6 to PD0 as output
+  6c:	8f e7       	ldi	r24, 0x7F	; 127
+  6e:	81 bb       	out	0x11, r24	; 17
+	DDRC = 0b01111111; // PC7 as INPUT, PC6 to PC0 as output	
+  70:	84 bb       	out	0x14, r24	; 20
+	while (1)
+	{
+		//PORTx = 0b0gfedcba;
+		PORTC = 0b00111111;// for number 0
+  72:	8f e3       	ldi	r24, 0x3F	; 63
+  74:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b01000000;// for number 0
+  76:	80 e4       	ldi	r24, 0x40	; 64
+  78:	82 bb       	out	0x12, r24	; 18
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  7a:	2f ef       	ldi	r18, 0xFF	; 255
+  7c:	89 e6       	ldi	r24, 0x69	; 105
+  7e:	98 e1       	ldi	r25, 0x18	; 24
+  80:	21 50       	subi	r18, 0x01	; 1
+  82:	80 40       	sbci	r24, 0x00	; 0
+  84:	90 40       	sbci	r25, 0x00	; 0
+  86:	e1 f7       	brne	.-8      	; 0x80 <main+0x14>
+  88:	00 c0       	rjmp	.+0      	; 0x8a <main+0x1e>
+  8a:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b00000110;// for number 1
+  8c:	86 e0       	ldi	r24, 0x06	; 6
+  8e:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b01111001;// for number 1
+  90:	89 e7       	ldi	r24, 0x79	; 121
+  92:	82 bb       	out	0x12, r24	; 18
+  94:	2f ef       	ldi	r18, 0xFF	; 255
+  96:	89 e6       	ldi	r24, 0x69	; 105
+  98:	98 e1       	ldi	r25, 0x18	; 24
+  9a:	21 50       	subi	r18, 0x01	; 1
+  9c:	80 40       	sbci	r24, 0x00	; 0
+  9e:	90 40       	sbci	r25, 0x00	; 0
+  a0:	e1 f7       	brne	.-8      	; 0x9a <main+0x2e>
+  a2:	00 c0       	rjmp	.+0      	; 0xa4 <main+0x38>
+  a4:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b01011011;// for number 2
+  a6:	8b e5       	ldi	r24, 0x5B	; 91
+  a8:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b00100100;// for number 2
+  aa:	84 e2       	ldi	r24, 0x24	; 36
+  ac:	82 bb       	out	0x12, r24	; 18
+  ae:	2f ef       	ldi	r18, 0xFF	; 255
+  b0:	89 e6       	ldi	r24, 0x69	; 105
+  b2:	98 e1       	ldi	r25, 0x18	; 24
+  b4:	21 50       	subi	r18, 0x01	; 1
+  b6:	80 40       	sbci	r24, 0x00	; 0
+  b8:	90 40       	sbci	r25, 0x00	; 0
+  ba:	e1 f7       	brne	.-8      	; 0xb4 <main+0x48>
+  bc:	00 c0       	rjmp	.+0      	; 0xbe <main+0x52>
+  be:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b01001111;// for number 3
+  c0:	8f e4       	ldi	r24, 0x4F	; 79
+  c2:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b00110000;// for number 3
+  c4:	80 e3       	ldi	r24, 0x30	; 48
+  c6:	82 bb       	out	0x12, r24	; 18
+  c8:	2f ef       	ldi	r18, 0xFF	; 255
+  ca:	89 e6       	ldi	r24, 0x69	; 105
+  cc:	98 e1       	ldi	r25, 0x18	; 24
+  ce:	21 50       	subi	r18, 0x01	; 1
+  d0:	80 40       	sbci	r24, 0x00	; 0
+  d2:	90 40       	sbci	r25, 0x00	; 0
+  d4:	e1 f7       	brne	.-8      	; 0xce <main+0x62>
+  d6:	00 c0       	rjmp	.+0      	; 0xd8 <main+0x6c>
+  d8:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b01100110;// for number 4
+  da:	86 e6       	ldi	r24, 0x66	; 102
+  dc:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b00011001;// for number 4
+  de:	89 e1       	ldi	r24, 0x19	; 25
+  e0:	82 bb       	out	0x12, r24	; 18
+  e2:	2f ef       	ldi	r18, 0xFF	; 255
+  e4:	89 e6       	ldi	r24, 0x69	; 105
+  e6:	98 e1       	ldi	r25, 0x18	; 24
+  e8:	21 50       	subi	r18, 0x01	; 1
+  ea:	80 40       	sbci	r24, 0x00	; 0
+  ec:	90 40       	sbci	r25, 0x00	; 0
+  ee:	e1 f7       	brne	.-8      	; 0xe8 <main+0x7c>
+  f0:	00 c0       	rjmp	.+0      	; 0xf2 <main+0x86>
+  f2:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b01101101;// for number 5
+  f4:	8d e6       	ldi	r24, 0x6D	; 109
+  f6:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b00010010;// for number 5
+  f8:	82 e1       	ldi	r24, 0x12	; 18
+  fa:	82 bb       	out	0x12, r24	; 18
+  fc:	2f ef       	ldi	r18, 0xFF	; 255
+  fe:	89 e6       	ldi	r24, 0x69	; 105
+ 100:	98 e1       	ldi	r25, 0x18	; 24
+ 102:	21 50       	subi	r18, 0x01	; 1
+ 104:	80 40       	sbci	r24, 0x00	; 0
+ 106:	90 40       	sbci	r25, 0x00	; 0
+ 108:	e1 f7       	brne	.-8      	; 0x102 <main+0x96>
+ 10a:	00 c0       	rjmp	.+0      	; 0x10c <main+0xa0>
+ 10c:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b01111101;// for number 6
+ 10e:	8d e7       	ldi	r24, 0x7D	; 125
+ 110:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b00000010;// for number 6
+ 112:	82 e0       	ldi	r24, 0x02	; 2
+ 114:	82 bb       	out	0x12, r24	; 18
+ 116:	2f ef       	ldi	r18, 0xFF	; 255
+ 118:	89 e6       	ldi	r24, 0x69	; 105
+ 11a:	98 e1       	ldi	r25, 0x18	; 24
+ 11c:	21 50       	subi	r18, 0x01	; 1
+ 11e:	80 40       	sbci	r24, 0x00	; 0
+ 120:	90 40       	sbci	r25, 0x00	; 0
+ 122:	e1 f7       	brne	.-8      	; 0x11c <main+0xb0>
+ 124:	00 c0       	rjmp	.+0      	; 0x126 <main+0xba>
+ 126:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b00000111;// for number 7
+ 128:	87 e0       	ldi	r24, 0x07	; 7
+ 12a:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b01111000;// for number 7
+ 12c:	88 e7       	ldi	r24, 0x78	; 120
+ 12e:	82 bb       	out	0x12, r24	; 18
+ 130:	2f ef       	ldi	r18, 0xFF	; 255
+ 132:	89 e6       	ldi	r24, 0x69	; 105
+ 134:	98 e1       	ldi	r25, 0x18	; 24
+ 136:	21 50       	subi	r18, 0x01	; 1
+ 138:	80 40       	sbci	r24, 0x00	; 0
+ 13a:	90 40       	sbci	r25, 0x00	; 0
+ 13c:	e1 f7       	brne	.-8      	; 0x136 <main+0xca>
+ 13e:	00 c0       	rjmp	.+0      	; 0x140 <main+0xd4>
+ 140:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b01111111;// for number 8
+ 142:	8f e7       	ldi	r24, 0x7F	; 127
+ 144:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b00000000;// for number 8
+ 146:	12 ba       	out	0x12, r1	; 18
+ 148:	2f ef       	ldi	r18, 0xFF	; 255
+ 14a:	89 e6       	ldi	r24, 0x69	; 105
+ 14c:	98 e1       	ldi	r25, 0x18	; 24
+ 14e:	21 50       	subi	r18, 0x01	; 1
+ 150:	80 40       	sbci	r24, 0x00	; 0
+ 152:	90 40       	sbci	r25, 0x00	; 0
+ 154:	e1 f7       	brne	.-8      	; 0x14e <main+0xe2>
+ 156:	00 c0       	rjmp	.+0      	; 0x158 <main+0xec>
+ 158:	00 00       	nop
+		_delay_ms(1000);
+		PORTC = 0b01101111;// for number 9
+ 15a:	8f e6       	ldi	r24, 0x6F	; 111
+ 15c:	85 bb       	out	0x15, r24	; 21
+		PORTD = 0b00010000;// for number 9
+ 15e:	80 e1       	ldi	r24, 0x10	; 16
+ 160:	82 bb       	out	0x12, r24	; 18
+ 162:	2f ef       	ldi	r18, 0xFF	; 255
+ 164:	89 e6       	ldi	r24, 0x69	; 105
+ 166:	98 e1       	ldi	r25, 0x18	; 24
+ 168:	21 50       	subi	r18, 0x01	; 1
+ 16a:	80 40       	sbci	r24, 0x00	; 0
+ 16c:	90 40       	sbci	r25, 0x00	; 0
+ 16e:	e1 f7       	brne	.-8      	; 0x168 <main+0xfc>
+ 170:	00 c0       	rjmp	.+0      	; 0x172 <main+0x106>
+ 172:	00 00       	nop
+ 174:	7e cf       	rjmp	.-260    	; 0x72 <main+0x6>
+
+00000176 <_exit>:
+ 176:	f8 94       	cli
+
+00000178 <__stop_program>:
+ 178:	ff cf       	rjmp	.-2      	; 0x178 <__stop_program>
